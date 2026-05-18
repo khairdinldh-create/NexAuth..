@@ -1,0 +1,15 @@
+
+
+import Noaccess from "../components/Noaccess";
+
+export default function PrivateRouter({user, children}) {
+  
+
+    if (user.isconnected && user.role === 'admin' ){
+      return children;
+    } else {
+      return <Noaccess />;
+    }
+
+  
+}
