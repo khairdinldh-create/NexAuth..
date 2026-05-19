@@ -25,6 +25,14 @@ require('./security/passport');
 
 
 
+
+const cors = require('cors');
+app.use(cors());
+
+
+
+
+
 //importing profile controllers
 
 
@@ -138,6 +146,11 @@ RolesMiddleware(['admin', 'user']),
 updateProfileValidator,// Only allow 'admin' and 'user' roles to access this route
 updateprofileRoute
 );
+
+
+
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

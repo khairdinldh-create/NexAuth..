@@ -46,23 +46,21 @@ const addprofileRoute = async (req, res) => {
 
 
 
-const showprofileRoute= async (req,res)=>{
-
-    try {
-        const profile = await Profile.findOne({ userId: req.user._id });
-        if (!profile) {
-          return res.status(404).json({ message: "Profile not found" });
-        }
-        res.status(200).json(profile);
-      } catch (err) {
-        console.error(err);
-        return res.status(500).json({ message: "Server error" });
-      }
-
-
+const showprofileRoute = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ userId: req.user._id });
     
-}
+    // Return empty profile instead of 404, so frontend doesn't crash
+    if (!profile) {
+      return res.status(200).json({ telephone: "", country: "", city: "" });
+    }
 
+    res.status(200).json(profile);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
 
 const showallprofilesRoute= async(req,res)=>{
     try {

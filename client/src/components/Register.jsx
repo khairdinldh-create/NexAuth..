@@ -1,169 +1,274 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-const EyeIcon = ({ open }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    {open ? (
-      <>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-      </>
-    ) : (
-      <path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
-    )}
-  </svg>
-);
+import Axios from "axios" // ✅ import useEffect
+
+import { useNavigate } from "react-router-dom";
+
+
 
 export default function Register() {
-  const [form, setForm] = useState({ fullName: "", email: "", password: "", confirmPassword: "" });
+  const navigate = useNavigate();
+
+
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" });
-  };
+
+
+
+
+
 
   const validate = () => {
-    const e = {};
-    if (!form.fullName.trim()) e.fullName = "Full name is required";
-    if (!form.email.includes("@")) e.email = "Enter a valid email";
-    if (form.password.length < 6) e.password = "Min 6 characters";
-    if (form.password !== form.confirmPassword) e.confirmPassword = "Passwords don't match";
-    return e;
+    const newErrors = {};
+  if (!fullName.trim()) newErrors.fullName = "Full name is required";
+  if (!email.includes("@")) newErrors.email = "Enter a valid email";
+  if (password.length < 8) newErrors.password = "Min 8 characters";
+  if (!/[A-Z]/.test(password)) newErrors.password = "Must include uppercase letter";
+  if (!/[0-9]/.test(password)) newErrors.password = "Must include a number";
+  if (!/[!@#$%^&*]/.test(password)) newErrors.password = "Must include a symbol";
+  if (password !== confirmPassword) newErrors.confirmPassword = "Passwords don't match";
+  return newErrors;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const errs = validate();
-    if (Object.keys(errs).length > 0) return setErrors(errs);
-    setLoading(true);
-    setTimeout(() => setLoading(false), 2000);
-  };
 
-  const Field = ({ label, name, type = "text", placeholder, showToggle, show, onToggle }) => (
-    <div className="mb-6">
-      <label className="block text-[10px] font-medium tracking-[0.16em] uppercase text-stone-400 mb-2">
-        {label}
-      </label>
-      <div className="relative">
-        <input
-          name={name}
-          type={showToggle ? (show ? "text" : "password") : type}
-          value={form[name]}
-          onChange={handleChange}
-          placeholder={placeholder}
-          className={`w-full bg-transparent border-b pb-2.5 pt-1 text-[15px] text-zinc-900 placeholder-stone-300 outline-none transition-colors duration-200
-            ${errors[name] ? "border-red-400" : "border-stone-300 focus:border-zinc-900"}`}
-        />
-        {showToggle && (
-          <button
-            type="button"
-            onClick={onToggle}
-            className="absolute right-0 top-1/2 -translate-y-1/2 text-stone-300 hover:text-zinc-900 transition-colors"
-          >
-            <EyeIcon open={show} />
-          </button>
-        )}
-      </div>
-      {errors[name] && (
-        <p className="mt-1.5 text-[11px] tracking-wide text-red-400">{errors[name]}</p>
-      )}
-    </div>
-  );
+
+
+
+
+
+
+
+
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  
+  const errs = validate();
+  if (Object.keys(errs).length > 0) {
+    setErrors(errs);
+    return;
+  }
+
+  setLoading(true);
+  try {
+    const res = await Axios.post("http://localhost:8000/register", {
+      name: fullName,
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword,
+      role: "user"
+    });
+
+    console.log(res.data);
+    setErrors({});
+
+
+
+
+
+
+
+    // clear the form
+    setFullName("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+
+
+    navigate("/Login"); 
+
+
+  } catch (error) {
+    // show backend error under the form
+   console.error(error);
+  setErrors({ general: error.response?.data?.message || "Something went wrong" });
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+
+
+
 
   return (
-
-
-    <div className="min-h-screen bg-stone-200 border-b border-stone-300 flex items-center justify-center px-4 pt-[50px] pb-[50px]">
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap');
-        .font-playfair { font-family: 'Playfair Display', serif; }
-        .font-dm { font-family: 'DM Sans', sans-serif; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .spin { animation: spin 0.8s linear infinite; }
-      `}</style>
-
-      <div className="w-full max-w-[420px] font-dm">
-
-        {/* Eyebrow */}
-        <p className="text-[10px] tracking-[0.22em] uppercase text-stone-400 mb-2">
-          New Account
-        </p>
+    <div className="min-h-screen bg-stone-200 flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-[420px]">
 
         {/* Title */}
-        <h1 className="font-playfair text-[48px] font-black leading-[1.05] tracking-tight text-zinc-900 mb-1">
-          Create<br />
-          <span className="font-playfair italic text-stone-400">Account.</span>
-        </h1>
+        <h1 className="text-3xl font-bold text-zinc-900 mb-2">Create Account</h1>
+        <p className="text-sm text-stone-400 mb-8">Join thousands of professionals worldwide.</p>
 
-        <p className="text-[13px] text-stone-400 mb-10 mt-2">
-          Join thousands of professionals worldwide.
-        </p>
 
-        {/* Form */}
+
+
+
+
         <form onSubmit={handleSubmit}>
-          <Field label="Full Name" name="fullName" placeholder="Ahmed Ben Ali" />
-          <Field label="Email Address" name="email" type="email" placeholder="ahmed@example.com" />
-          <Field
-            label="Password"
-            name="password"
-            placeholder="Min 6 characters"
-            showToggle
-            show={showPassword}
-            onToggle={() => setShowPassword(!showPassword)}
-          />
-          <Field
-            label="Confirm Password"
-            name="confirmPassword"
-            placeholder="Repeat your password"
-            showToggle
-            show={showConfirm}
-            onToggle={() => setShowConfirm(!showConfirm)}
-          />
 
-          {/* Submit */}
+
+
+
+
+          {/* Full Name */}
+          <div className="mb-5">
+            <label className="block text-sm font-medium text-zinc-700 mb-1">Full Name</label>
+            <input
+              type="text"
+              value={fullName}
+              onChange={(e) => {
+                setFullName(e.target.value);
+                setErrors({ ...errors, fullName: "" });
+              }}
+              placeholder="Ahmed Ben Ali"
+              className={`w-full border rounded-md px-4 py-2.5 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900
+                ${errors.fullName ? "border-red-400" : "border-stone-300"}`}
+            />
+            {errors.fullName && <p className="text-red-400 text-xs mt-1">{errors.fullName}</p>}
+            {errors.general && <p className="text-red-400 text-xs mt-1">{errors.general}</p>}
+          </div>
+
+
+
+
+
+
+
+          {/* Email */}
+          <div className="mb-5">
+            <label className="block text-sm font-medium text-zinc-700 mb-1">Email Address</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setErrors({ ...errors, email: "" });
+              }}
+              placeholder="ahmed@example.com"
+              className={`w-full border rounded-md px-4 py-2.5 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900
+                ${errors.email ? "border-red-400" : "border-stone-300"}`}
+            />
+            {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
+            {errors.general && <p className="text-red-400 text-xs mt-1">{errors.general}</p>}
+          </div>
+
+
+
+
+
+
+
+
+
+          {/* Password */}
+          <div className="mb-5">
+            <label className="block text-sm font-medium text-zinc-700 mb-1">Password</label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setErrors({ ...errors, password: "" });
+                }}
+                placeholder="Min 6 characters"
+                className={`w-full border rounded-md px-4 py-2.5 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900
+                  ${errors.password ? "border-red-400" : "border-stone-300"}`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 text-xs hover:text-zinc-900"
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+
+                  
+
+            </div>
+            {errors.password && <p className="text-red-400 text-xs mt-1">{errors.password}</p>}
+            {errors.general && <p className="text-red-400 text-xs mt-1">{errors.general}</p>}
+          </div>
+
+
+
+
+
+
+          {/* Confirm Password */}
+          <div className="mb-5">
+            <label className="block text-sm font-medium text-zinc-700 mb-1">Confirm Password</label>
+            <div className="relative">
+              <input
+                type={showConfirm ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  setErrors({ ...errors, confirmPassword: "" });
+                }}
+                placeholder="Repeat your password"
+                className={`w-full border rounded-md px-4 py-2.5 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900
+                  ${errors.confirmPassword ? "border-red-400" : "border-stone-300"}`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirm(!showConfirm)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 text-xs hover:text-zinc-900"
+              >
+                {showConfirm ? "Hide" : "Show"}
+              </button>
+            </div>
+            {errors.confirmPassword && <p className="text-red-400 text-xs mt-1">{errors.confirmPassword}</p>}
+            {errors.general && <p className="text-red-400 text-xs mt-1">{errors.general}</p>}
+          </div>
+
+
+
+
+
+
+
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-4 py-4 bg-zinc-900 text-[#f0ede8] text-[11px] font-medium tracking-[0.22em] uppercase rounded-sm
-              flex items-center justify-center gap-3 transition-all duration-200
-              hover:bg-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full mt-2 py-3 bg-zinc-900 text-white text-sm font-medium rounded-md
+              hover:bg-zinc-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? (
-              <>
-                <svg className="spin" width="14" height="14" fill="none" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeDasharray="60" strokeDashoffset="20" />
-                </svg>
-                Creating Account…
-              </>
-            ) : (
-              "Create Account →"
-            )}
+            {loading ? "Creating Account..." : "Create Account"}
           </button>
+
         </form>
 
-        {/* Divider */}
-        <div className="flex items-center gap-4 my-7">
-          <div className="flex-1 h-px bg-stone-200" />
-          <span className="text-[10px] tracking-[0.16em] uppercase text-stone-300">or</span>
-          <div className="flex-1 h-px bg-stone-200" />
-        </div>
 
-        {/* Google */}
-     
 
-        {/* Sign in */}
-        <p className="text-center text-[12px] text-stone-400 mt-7">
+
+        {errors.general && <p className="text-red-400 text-sm text-center mt-3">{errors.general}</p>}
+
+
+
+
+
+
+
+
+
+
+
+
+        {/* Sign in link */}
+        <p className="text-center text-sm text-stone-400 mt-6">
           Already have an account?{" "}
-          <Link to="/login" className="text-zinc-900 font-medium border-b border-zinc-900 pb-px hover:text-stone-500 hover:border-stone-500 transition-colors">
+          <Link to="/login" className="text-zinc-900 font-medium hover:underline">
             Sign in
           </Link>
-        </p>
-
-        <p className="text-center text-[10px] text-stone-300 tracking-wide mt-5">
-          By registering you agree to our Terms & Privacy Policy
         </p>
 
       </div>

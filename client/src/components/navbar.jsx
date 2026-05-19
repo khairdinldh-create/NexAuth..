@@ -1,6 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import {GlobalContext} from "./GlobalContext";
+
+
+import Home from "./Home";
 export default function Navbar({user}) {
+
+    const { logout } = useContext(GlobalContext);
 
 
   
@@ -48,6 +57,16 @@ export default function Navbar({user}) {
         ) : ""}
 
 
+
+          {(user.isconnected===true && user.role === 'admin' || user.role === 'user') ? (
+          <Link to="/" onClick={logout} className="group relative text-[13.5px] font-normal text-zinc-700 no-underline whitespace-nowrap">
+            logout
+          </Link>
+        ) : ""}
+
+        
+
+        
 
         <Link to="/profile" className="group relative text-[13.5px] font-normal text-zinc-700 no-underline whitespace-nowrap">
          <button className="h-9 cursor-pointer rounded border border-zinc-900 bg-transparent px-5 text-[13px] font-normal text-zinc-900 transition-all duration-150 hover:bg-zinc-900 hover:text-white whitespace-nowrap">

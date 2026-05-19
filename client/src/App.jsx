@@ -16,21 +16,38 @@ import Noaccess from './components/Noaccess'
 import PrivateRouter from './Privacy/PrivateRouter'
 import PrivateRouterAdmin from './Privacy/PrivateRouterAdmin'
 import ForceRedirect from './Privacy/ForceRedirect'
+
+
+
+
+
+import { useContext } from 'react'
+import { GlobalContext } from './components/GlobalContext'
+
 function App() {
 
+  
 
-  const user = {
-    isconnected: false,
-    role: 'usr'
-  };
+
+
+
+
+
+
+  const { user } = useContext(GlobalContext);
+
+  const userInfo = {
+  isconnected: user ? true : false,
+  role: user ? user.role : null
+};
 
 
   return (
 
-
+    
     <div>
 
-    <Navbar user={user} />
+    <Navbar user={userInfo} />
 
     <Routes>
 
@@ -39,15 +56,17 @@ function App() {
     
 
       
-      <Route path='/Register' element={ <ForceRedirect user={user} > <Register /></ForceRedirect>} />
-      <Route path='/Login' element={ <ForceRedirect user={user} > <Login /></ForceRedirect>} />
+      <Route path='/Register' element={ <ForceRedirect user={userInfo} > <Register /></ForceRedirect>} />
+      <Route path='/Login' element={ <ForceRedirect user={userInfo} > <Login /></ForceRedirect>} />
 
 
 
-      <Route path='/Profile' element={ <PrivateRouter user={user} > <Profile /></PrivateRouter>} />
+      <Route path='/Profile' element={ <PrivateRouter user={userInfo} > <Profile /></PrivateRouter>} />
      
       
-      <Route path='/Admin' element={ <PrivateRouterAdmin user={user} > <Admin /></PrivateRouterAdmin>} />
+      <Route path='/Admin' element={ <PrivateRouterAdmin user={userInfo} > <Admin /></PrivateRouterAdmin>} />
+
+
       
 
 
