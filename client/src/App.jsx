@@ -16,7 +16,7 @@ import Noaccess from './components/Noaccess'
 import PrivateRouter from './Privacy/PrivateRouter'
 import PrivateRouterAdmin from './Privacy/PrivateRouterAdmin'
 import ForceRedirect from './Privacy/ForceRedirect'
-
+import Showprofilebyadmin from './components/Showprofilebyadmin'
 
 
 
@@ -65,6 +65,9 @@ function App() {
      
       
       <Route path='/Admin' element={ <PrivateRouterAdmin user={userInfo} > <Admin /></PrivateRouterAdmin>} />
+
+
+      <Route path='/admin/profile/user/:id' element={ <PrivateRouterAdmin user={userInfo} > <Showprofilebyadmin user={userInfo} /></PrivateRouterAdmin>} />
 
 
       

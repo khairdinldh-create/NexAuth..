@@ -52,7 +52,7 @@ export default function Navbar({user}) {
 
         {(user.isconnected===true && user.role === 'admin') ? (
           <Link to="/admin" className="group relative text-[13.5px] font-normal text-zinc-700 no-underline whitespace-nowrap">
-            Admin
+            Admin Dashboard
           </Link>
         ) : ""}
 
@@ -63,6 +63,11 @@ export default function Navbar({user}) {
             logout
           </Link>
         ) : ""}
+
+
+        <Link to="/"  className="group relative text-[13.5px] font-normal text-zinc-700 no-underline whitespace-nowrap">
+            Home 
+          </Link>
 
         
 

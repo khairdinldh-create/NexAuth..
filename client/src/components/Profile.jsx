@@ -8,6 +8,11 @@ import axios from "axios";
 
 export default function Profile() {
 
+  const {user} = useContext(GlobalContext);
+ 
+
+  const Profilename=user.name;
+  
 
   const [fetching, setFetching] = useState(true);
 
@@ -154,10 +159,33 @@ export default function Profile() {
 
 
 
+const handleDelete = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    await Axios.delete("http://localhost:8000/deleteprofile", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log("Profile deleted successfully!");
+    setSuccess(true);
+    setForm({
+      telephone: "",
+      country: "",
+      city: "",
+    });
 
 
 
-  
+
+
+  } catch (error) {
+    console.error("Failed to delete profile:", error);
+  }
+};
+
+
+  const initials = user?.name
+  ? user.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+  : '?';
 
 
 
@@ -168,96 +196,109 @@ export default function Profile() {
   return (
 
 
-    <div className="min-h-screen bg-stone-200 flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-[420px]">
-
-        {/* Title */}
-        <h1 className="text-3xl font-bold text-zinc-900 mb-2">Your Profile</h1>
-        <p className="text-sm text-stone-400 mb-8">Complete your profile information.</p>
-
-        {success && (
-          <div className="mb-6 px-4 py-3 bg-green-50 border border-green-200 rounded-md">
-            <p className="text-green-700 text-sm">Profile saved successfully!</p>
-          </div>
-        )}
 
 
+<div className="min-h-screen bg-stone-200 flex items-center justify-center px-4 py-12">
+  <div className="w-full max-w-[420px]">
 
-        <form onSubmit={handleSubmit}>
+    <h1 className="text-3xl font-bold text-zinc-900 mb-2">Your Profile</h1>
+    <p className="text-sm text-stone-400 mb-8">Complete your profile information.</p>
 
-          {/* Telephone */}
-          <div className="mb-5">
-            <label className="block text-sm font-medium text-zinc-700 mb-1">
-              Telephone
-            </label>
-            <input
-              type="tel"
-              name="telephone"
-              value={form.telephone}
-              onChange={handleChange}
-              placeholder="+213 123 456 789"
-              className={`w-full border rounded-md px-4 py-2.5 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900
-                ${errors.telephone ? "border-red-400" : "border-stone-300"}`}
-            />
-            {errors.telephone && (
-              <p className="text-red-400 text-xs mt-1">{errors.telephone}</p>
-            )}
-          </div>
-
-          {/* Country */}
-          <div className="mb-5">
-            <label className="block text-sm font-medium text-zinc-700 mb-1">
-              Country
-            </label>
-            <input
-              type="text"
-              name="country"
-              value={form.country}
-              onChange={handleChange}
-              placeholder="Algeria"
-              className={`w-full border rounded-md px-4 py-2.5 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900
-                ${errors.country ? "border-red-400" : "border-stone-300"}`}
-            />
-            {errors.country && (
-              <p className="text-red-400 text-xs mt-1">{errors.country}</p>
-            )}
-          </div>
-
-          {/* City */}
-          <div className="mb-5">
-            <label className="block text-sm font-medium text-zinc-700 mb-1">
-              City
-            </label>
-            <input
-              type="text"
-              name="city"
-              value={form.city}
-              onChange={handleChange}
-              placeholder="Algiers"
-              className={`w-full border rounded-md px-4 py-2.5 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900
-                ${errors.city ? "border-red-400" : "border-stone-300"}`}
-            />
-            {errors.city && (
-              <p className="text-red-400 text-xs mt-1">{errors.city}</p>
-            )}
-          </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full mt-2 py-3 bg-zinc-900 text-white text-sm font-medium rounded-md
-              hover:bg-zinc-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? "Saving..." : "Save Profile"}
-          </button>
-
-          {errors.general && (
-            <p className="text-red-400 text-sm text-center mt-3">{errors.general}</p>
-          )}
-
-        </form>
+    {/* Avatar + name */}
+    <div className="flex items-center gap-4 mb-6">
+      <div className="w-12 h-12 rounded-full bg-zinc-900 text-white flex items-center justify-center text-sm font-medium">
+        {initials}
+      </div>
+      <div>
+        <p className="font-semibold text-zinc-900">{user?.name}</p>
+        <p className="text-sm text-stone-400">{user?.email}</p>
       </div>
     </div>
+
+    <hr className="border-stone-300 mb-6" />
+
+    {success && (
+      <div className="mb-6 px-4 py-3 bg-green-50 border border-green-200 rounded-md">
+        <p className="text-green-700 text-sm">
+          {form.telephone === ""
+            ? "Profile deleted successfully!"
+            : "Profile saved successfully!"}
+        </p>
+      </div>
+    )}
+
+    <form onSubmit={handleSubmit}>
+
+      <div className="mb-5">
+        <label className="block text-sm font-medium text-zinc-700 mb-1">Telephone</label>
+        <input
+          type="tel"
+          name="telephone"
+          value={form.telephone}
+          onChange={handleChange}
+          placeholder="+213 123 456 789"
+          className={`w-full border rounded-md px-4 py-2.5 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900
+            ${errors.telephone ? "border-red-400" : "border-stone-300"}`}
+        />
+        {errors.telephone && <p className="text-red-400 text-xs mt-1">{errors.telephone}</p>}
+      </div>
+
+      {/* Country + City horizontal */}
+      <div className="flex flex-row gap-4 mb-5">
+        <div className="flex-1">
+          <label className="block text-sm font-medium text-zinc-700 mb-1">Country</label>
+          <input
+            type="text"
+            name="country"
+            value={form.country}
+            onChange={handleChange}
+            placeholder="Algeria"
+            className={`w-full border rounded-md px-4 py-2.5 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900
+              ${errors.country ? "border-red-400" : "border-stone-300"}`}
+          />
+          {errors.country && <p className="text-red-400 text-xs mt-1">{errors.country}</p>}
+        </div>
+
+        <div className="flex-1">
+          <label className="block text-sm font-medium text-zinc-700 mb-1">City</label>
+          <input
+            type="text"
+            name="city"
+            value={form.city}
+            onChange={handleChange}
+            placeholder="Algiers"
+            className={`w-full border rounded-md px-4 py-2.5 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900
+              ${errors.city ? "border-red-400" : "border-stone-300"}`}
+          />
+          {errors.city && <p className="text-red-400 text-xs mt-1">{errors.city}</p>}
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full mt-2 py-3 bg-zinc-900 text-white text-sm font-medium rounded-md
+          hover:bg-zinc-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {loading ? "Saving..." : "Save Profile"}
+      </button>
+
+      <button
+        type="button"
+        disabled={loading}
+        onClick={handleDelete}
+        className="w-full mt-2 py-3 bg-red-800 text-white text-sm font-medium rounded-md
+          hover:bg-zinc-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {loading ? "Deleting..." : "Delete Profile"}
+      </button>
+
+      {errors.general && (
+        <p className="text-red-400 text-sm text-center mt-3">{errors.general}</p>
+      )}
+
+    </form>
+  </div>
+</div>
   );
-}
+};

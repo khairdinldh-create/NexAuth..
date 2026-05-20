@@ -41,9 +41,12 @@ const {
   showprofileRoute, 
   showallprofilesRoute, 
   deleteprofileRoute,
-  deletespeceficprofilebyadminRoute,
+  deletespeceficuserbyadminRoute,
   showspeceficprofilebyadminRoute,
-  updateprofileRoute
+  updateprofileRoute,
+  showusersbyadminRoute,
+  showuserinfobyadminRoute
+  
 } = require('./Controllers/profile');
 
 
@@ -108,6 +111,10 @@ adminRoute
 );
 
 
+// reload problem
+app.get('/user', passport.authenticate('jwt', { session: false }), (req, res) => {
+  res.json(req.user); // passport already decoded the token and put user here
+});
 
 
 
@@ -177,6 +184,31 @@ app.get('/profiles', passport.authenticate('jwt', { session: false }),
 RolesMiddleware(['admin']), // Only allow 'admin' role   to access this route   
 showallprofilesRoute
 );
+
+
+
+app.get('/admin/users', passport.authenticate('jwt', { session: false }),
+RolesMiddleware(['admin']), // Only allow 'admin' role to access this route
+showusersbyadminRoute
+);
+
+
+
+app.delete('/admin/deleteuser/:id', passport.authenticate('jwt', { session: false }),
+RolesMiddleware(['admin']), // Only allow 'admin' role to access this route
+deletespeceficuserbyadminRoute
+);
+
+
+
+app.get('/admin/user/:id', passport.authenticate('jwt', { session: false }),
+RolesMiddleware(['admin']), // Only allow 'admin' role to access this route
+showuserinfobyadminRoute
+);
+
+
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,7 @@
 
 
 const Profile=require('../Models/Profile');
+const Users = require('../models/Users');
 
 const addprofileRoute = async (req, res) => {
     try {
@@ -139,15 +140,15 @@ const updateprofileRoute = async (req, res) => {
 
 
 
-const deletespeceficprofilebyadminRoute = async (req, res) => {
+const deletespeceficuserbyadminRoute = async (req, res) => {
     try {
-        const profile = await Profile.findOneAndDelete({ userId: req.params.id }); // 👈 one line does both
+        const user = await Users.findOneAndDelete( req.params.id ); // 👈 one line does both
 
-        if (!profile) {
-          return res.status(404).json({ message: "Profile not found" });
+        if (!user) {
+          return res.status(404).json({ message: "user not found" });
         }
 
-        res.status(200).json({ message: "Profile deleted successfully" });
+        res.status(200).json({ message: "user deleted successfully" });
 
     } catch (err) {
         console.error(err);
@@ -176,13 +177,46 @@ const showspeceficprofilebyadminRoute = async (req, res) => {
 };
 
 
+const showusersbyadminRoute = async (req, res) => {
+  try {
+    const users = await Users.find().select("-password");
+    res.status(200).json(users);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
+const showuserinfobyadminRoute = async (req, res) => {
+  try {
+    const userinfo = await Users.findById(req.params.id).select("-password");
+    res.status(200).json(userinfo);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
+
+
+
+
+
+
+
 
 module.exports = { 
   addprofileRoute, 
   showprofileRoute, 
   showallprofilesRoute, 
   deleteprofileRoute,
-  deletespeceficprofilebyadminRoute,
+  deletespeceficuserbyadminRoute,
   showspeceficprofilebyadminRoute,
-  updateprofileRoute
+  updateprofileRoute,
+  showusersbyadminRoute,
+  showuserinfobyadminRoute
 };
