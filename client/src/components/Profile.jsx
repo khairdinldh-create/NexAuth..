@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Axios from "axios";
 
-
+const API_URL = import.meta.env.VITE_API_URL
 import { useContext } from "react";
 import { GlobalContext } from "./GlobalContext";
 import axios from "axios";
@@ -96,7 +96,7 @@ export default function Profile() {
     try {
       const token = localStorage.getItem("token");
       const res = await Axios.post(
-        "http://localhost:8000/profile",
+        `${API_URL}/profile`,
         {
           telephone: form.telephone,
           country: form.country,
@@ -127,7 +127,7 @@ export default function Profile() {
   const token = localStorage.getItem("token");
   if (!token) { setFetching(false); return; }
 
-  Axios.get("http://localhost:8000/profile", {  // ← no /:id
+  Axios.get(`${API_URL}/profile`, {  // ← no /:id
     headers: { Authorization: `Bearer ${token}` },
   })
     .then((res) => {
@@ -141,7 +141,7 @@ export default function Profile() {
     .finally(() => setFetching(false));
 
 
-  axios.get("http://localhost:8000/user", {
+  axios.get(`${API_URL}/user`, {
     headers: { Authorization: `Bearer ${token}` },
   })
     .then((res) => {
@@ -162,7 +162,7 @@ export default function Profile() {
 const handleDelete = async () => {
   try {
     const token = localStorage.getItem("token");
-    await Axios.delete("http://localhost:8000/deleteprofile", {
+    await Axios.delete(`${API_URL}/deleteprofile`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log("Profile deleted successfully!");

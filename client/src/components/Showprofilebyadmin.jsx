@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-
+const API_URL = import.meta.env.VITE_API_URL
 const Showprofilebyadmin = () => {
   const { id } = useParams();
   const [profile, setProfile] = useState(null);
@@ -12,7 +12,7 @@ const Showprofilebyadmin = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    axios.get(`http://localhost:8000/showprofilebyadmin/${id}`, {
+    axios.get(`${API_URL}/showprofilebyadmin/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => setProfile(res.data))
@@ -22,7 +22,7 @@ const Showprofilebyadmin = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    axios.get(`http://localhost:8000/admin/user/${id}`, {
+    axios.get(`${API_URL}/admin/user/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => {

@@ -7,7 +7,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const dotenv = require("dotenv");
 dotenv.config();
-const users=require("./models/Users");
+const users=require("./Models/Users");
 const Register = require('./Controllers/Userregister');
 const registerValidator = require('./Validators/RegisterValidator');
 const loginValidator = require('./Validators/loginValidator');

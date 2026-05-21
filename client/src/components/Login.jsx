@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import Axios from "axios" // ✅ import useEffect
-
+const API_URL = import.meta.env.VITE_API_URL
 
 import { useNavigate } from "react-router-dom";
 
@@ -50,7 +50,7 @@ export default function Login() {
 
   setLoading(true);
   try {
-    const res = await Axios.post("http://localhost:8000/login", {
+    const res = await Axios.post(`${API_URL}/login`, {
       email: email,
       password: password,
     });

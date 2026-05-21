@@ -5,7 +5,7 @@ import Axios from "axios" // ✅ import useEffect
 import { useNavigate } from "react-router-dom";
 
 
-
+const API_URL = import.meta.env.VITE_API_URL
 export default function Register() {
   const navigate = useNavigate();
 
@@ -57,7 +57,7 @@ export default function Register() {
 
   setLoading(true);
   try {
-    const res = await Axios.post("http://localhost:8000/register", {
+    const res = await Axios.post(`${API_URL}/register`, {
       name: fullName,
       email: email,
       password: password,

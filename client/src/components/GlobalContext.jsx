@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { useEffect } from "react";
 export const GlobalContext = createContext();
-
+const API_URL = import.meta.env.VITE_API_URL
 export default function GlobalState({ children }) {
 
 
@@ -14,7 +14,7 @@ export default function GlobalState({ children }) {
   const token = localStorage.getItem('token');
   if (!token) return;
 
-  axios.get('http://localhost:8000/user', {
+  axios.get(`${API_URL}/user`, {
     headers: { Authorization: `Bearer ${token}` },
   })
     .then(res => {

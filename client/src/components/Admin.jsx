@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 import { useNavigate } from "react-router-dom"; 
 
-
+const API_URL = import.meta.env.VITE_API_URL
 export default function Admin() {
 
 
@@ -27,7 +27,7 @@ export default function Admin() {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await Axios.get("http://localhost:8000/admin/users", {
+        const res = await Axios.get(`${API_URL}/admin/users`, {
           headers: { Authorization: "Bearer " + token },
         });
         setUsers(res.data);
@@ -52,7 +52,7 @@ export default function Admin() {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
       const token = localStorage.getItem("token");
-      await Axios.delete("http://localhost:8000/admin/deleteuser/" + id, {
+      await Axios.delete(`${API_URL}/admin/deleteuser/` + id, {
         headers: { Authorization: "Bearer " + token },
       });
       setUsers((prev) => prev.filter((u) => u._id !== id));
