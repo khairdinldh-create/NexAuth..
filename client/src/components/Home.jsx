@@ -24,7 +24,7 @@ export default function Home() {
         </p>
         <div className="flex gap-3 justify-center flex-wrap">
           <button
-            onClick={() => goTo("/profile")}
+            onClick={() => goTo("/Profile")}
             className="px-6 py-2.5 rounded-lg bg-stone-700 cursor-pointer text-white text-sm font-medium hover:bg-stone-800 transition"
           >
             My Profile
