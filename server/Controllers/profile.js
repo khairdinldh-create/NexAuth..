@@ -1,5 +1,5 @@
-const Profile = require('../models/Profile');
-const Users = require('../models/Users');
+const Profile = require('../Models/Profile');
+const Users = require('../Models/Users');
 
 // ─────────────────────────────────────────────
 // USER: Add or Update their own profile
