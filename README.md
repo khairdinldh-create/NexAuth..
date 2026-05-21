@@ -1,5 +1,12 @@
 # AUTHY. 🔐
 
+![MERN](https://img.shields.io/badge/MERN-Stack-green)
+![JWT](https://img.shields.io/badge/Auth-JWT-blue)
+![MongoDB](https://img.shields.io/badge/Database-MongoDB-brightgreen)
+![Express](https://img.shields.io/badge/Backend-Express-black)
+![React](https://img.shields.io/badge/Frontend-React-61dafb)
+![Status](https://img.shields.io/badge/Status-Deployed-success)
+
 > A secure, production-ready authentication system built with the MERN stack. Features role-based access control, JWT authentication, and a full admin dashboard.
 
 🌐 **Live Demo:** [nexauthproject.netlify.app](https://nexauthproject.netlify.app)  
