@@ -1,13 +1,10 @@
 import { useContext } from "react";
 import { GlobalContext } from "./GlobalContext";
-
+import { useNavigate } from 'react-router-dom';
 export default function Home() {
   const { user } = useContext(GlobalContext);
 
-  const goTo = (path) => {
-    window.location.href = path;
-  };
-
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-stone-200">
 
@@ -24,7 +21,7 @@ export default function Home() {
         </p>
         <div className="flex gap-3 justify-center flex-wrap">
           <button
-            onClick={() => goTo("/Profile")}
+            onClick={() => navigate("/Profile")}
             className="px-6 py-2.5 rounded-lg bg-stone-700 cursor-pointer text-white text-sm font-medium hover:bg-stone-800 transition"
           >
             My Profile
