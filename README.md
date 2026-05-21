@@ -1,16 +1,27 @@
 # AUTHY. 🔐
 
-![MERN](https://img.shields.io/badge/MERN-Stack-green)
-![JWT](https://img.shields.io/badge/Auth-JWT-blue)
-![MongoDB](https://img.shields.io/badge/Database-MongoDB-brightgreen)
-![Express](https://img.shields.io/badge/Backend-Express-black)
-![React](https://img.shields.io/badge/Frontend-React-61dafb)
-![Status](https://img.shields.io/badge/Status-Deployed-success)
+# AUTHY. 🔐
+
+<div align="center">
+
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_Site-FF6B6B?style=for-the-badge)](https://nexauthproject.netlify.app)
+[![Backend](https://img.shields.io/badge/🔧_API-Render-6C63FF?style=for-the-badge)](https://nexauth-4u1v.onrender.com)
+
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
+![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Node](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Passport](https://img.shields.io/badge/Passport.js-34E27A?style=for-the-badge&logo=passport&logoColor=white)
+
+![Status](https://img.shields.io/badge/Status-Live%20%26%20Deployed-success?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
+
+</div>
 
 > A secure, production-ready authentication system built with the MERN stack. Features role-based access control, JWT authentication, and a full admin dashboard.
-
-🌐 **Live Demo:** [nexauthproject.netlify.app](https://nexauthproject.netlify.app)  
-🔧 **Backend API:** [nexauth-4u1v.onrender.com](https://nexauth-4u1v.onrender.com)
 
 ![AUTHY Home](./screenshots/home.png)
 
