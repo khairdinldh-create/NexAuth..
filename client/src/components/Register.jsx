@@ -65,7 +65,7 @@ export default function Register() {
       role: "user"
     });
 
-    console.log(res.data);
+    
     setErrors({});
 
 
@@ -239,7 +239,7 @@ export default function Register() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-2 py-3 bg-zinc-900 text-white text-sm font-medium rounded-md
+            className="w-full mt-2 py-3 cursor-pointer bg-zinc-900 text-white text-sm font-medium rounded-md
               hover:bg-zinc-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Creating Account..." : "Create Account"}
@@ -266,7 +266,7 @@ export default function Register() {
         {/* Sign in link */}
         <p className="text-center text-sm text-stone-400 mt-6">
           Already have an account?{" "}
-          <Link to="/login" className="text-zinc-900 font-medium hover:underline">
+          <Link to="/login" className="text-zinc-900 cursor-pointer font-medium hover:underline">
             Sign in
           </Link>
         </p>

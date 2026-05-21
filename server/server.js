@@ -113,9 +113,9 @@ adminRoute
 
 // reload problem
 app.get('/user', passport.authenticate('jwt', { session: false }), (req, res) => {
-  res.json(req.user); // passport already decoded the token and put user here
+  const { password, __v, ...safeUser } = req.user.toObject();
+  res.json(safeUser);
 });
-
 
 
 

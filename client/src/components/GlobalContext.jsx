@@ -17,7 +17,10 @@ export default function GlobalState({ children }) {
   axios.get('http://localhost:8000/user', {
     headers: { Authorization: `Bearer ${token}` },
   })
-    .then(res => setUser(res.data))
+    .then(res => {
+  const { password, __v,...safeUser } = res.data;
+  setUser(safeUser);
+})
     .catch((err) => {
       if (err.response?.status === 401) {
         localStorage.removeItem('token');
@@ -40,7 +43,10 @@ export default function GlobalState({ children }) {
 
   
 
-  const login = (userData) => setUser(userData);
+  const login = (userData) => {
+  const { password, __v, ...safeUser } = userData;
+  setUser(safeUser);
+};
   const logout = () => {
     setUser(null);
     localStorage.removeItem("token");

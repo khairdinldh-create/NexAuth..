@@ -1,57 +1,49 @@
-
-
-const Profile=require('../Models/Profile');
+const Profile = require('../models/Profile');
 const Users = require('../models/Users');
 
+// ─────────────────────────────────────────────
+// USER: Add or Update their own profile
+// ─────────────────────────────────────────────
 const addprofileRoute = async (req, res) => {
-    try {
-        const isthereprofile = await Profile.findOne({ userId: req.user._id });
+  try {
+    const { telephone, country, city } = req.body;
 
-        // profile doesn't exist → create it
-        if (!isthereprofile) {
-            const newProfile = new Profile({
-                telephone: req.body.telephone,
-                country: req.body.country,
-                city: req.body.city,
-                userId: req.user._id,
-            });
+    const existingProfile = await Profile.findOne({ userId: req.user._id });
 
-            await newProfile.save();
-            return res.status(201).json({ message: "Profile added successfully" });
-        }
+    if (!existingProfile) {
+      const newProfile = new Profile({
+        telephone,
+        country,
+        city,
+        userId: req.user._id,
+      });
 
-        // profile exists → update it
-        const profile = await Profile.findOneAndUpdate(
-            { userId: req.user._id },
-            { 
-                telephone: req.body.telephone, 
-                country: req.body.country, 
-                city: req.body.city 
-            },
-            { new: true }
-        );
-
-        return res.status(200).json({ message: "Profile updated successfully", profile });
-
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ message: "Server error" });
+      await newProfile.save();
+      return res.status(201).json({ message: "Profile added successfully" });
     }
+
+    const updated = await Profile.findOneAndUpdate(
+      { userId: req.user._id },
+      { telephone, country, city },
+      { new: true }
+    ).select("-userId -__v");
+
+    return res.status(200).json({ message: "Profile updated successfully", profile: updated });
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
 };
 
-
-
-
-
-
-
-
-
+// ─────────────────────────────────────────────
+// USER: Show their own profile
+// ─────────────────────────────────────────────
 const showprofileRoute = async (req, res) => {
   try {
-    const profile = await Profile.findOne({ userId: req.user._id });
-    
-    // Return empty profile instead of 404, so frontend doesn't crash
+    const profile = await Profile.findOne({ userId: req.user._id })
+      .select("-_id -userId -__v");
+
     if (!profile) {
       return res.status(200).json({ telephone: "", country: "", city: "" });
     }
@@ -63,123 +55,67 @@ const showprofileRoute = async (req, res) => {
   }
 };
 
-const showallprofilesRoute= async(req,res)=>{
-    try {
-        const profiles = await Profile.find();
-        res.status(200).json(profiles);
-      } catch (err) {
-        console.error(err);
-        return res.status(500).json({ message: "Server error" });
-      }
-}
-
-
-
-const deleteprofileRoute = async (req, res) => {
-    try {
-        const profile = await Profile.findOneAndDelete({ userId: req.user._id }); // 👈 one line does both
-
-        if (!profile) {
-          return res.status(404).json({ message: "Profile not found" });
-        }
-
-        res.status(200).json({ message: "Profile deleted successfully" });
-
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ message: "Server error" });
-    }
-};
-
-
-
+// ─────────────────────────────────────────────
+// USER: Update their own profile
+// ─────────────────────────────────────────────
 const updateprofileRoute = async (req, res) => {
+  try {
+    const { telephone, country, city } = req.body;
 
+    const profile = await Profile.findOneAndUpdate(
+      { userId: req.user._id },
+      { telephone, country, city },
+      { new: true }
+    ).select("-userId -__v");
 
-    
-
-
-
-
-
-    try {
-        // ✅ only take allowed fields from body
-        const { telephone, country, city } = req.body;
-
-        const profile = await Profile.findOneAndUpdate(
-          { userId: req.user._id },
-          { telephone, country, city }, // 👈 only these 3 fields
-          { new: true }
-        );
-
-        if (!profile) {
-          return res.status(404).json({ message: "Profile not found" });
-        }
-
-        res.status(200).json({ message: "Profile updated successfully", profile });
-
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ message: "Server error" });
-    }
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const deletespeceficuserbyadminRoute = async (req, res) => {
-    try {
-        const user = await Users.findOneAndDelete( req.params.id ); // 👈 one line does both
-
-        if (!user) {
-          return res.status(404).json({ message: "user not found" });
-        }
-
-        res.status(200).json({ message: "user deleted successfully" });
-
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ message: "Server error" });
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
     }
 
-
+    res.status(200).json({ message: "Profile updated successfully", profile });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
 };
 
-const showspeceficprofilebyadminRoute = async (req, res) => {
-    try {
-        const profile = await Profile.findOne({ userId: req.params.id });// 👈 one line does both
+// ─────────────────────────────────────────────
+// USER: Delete their own profile
+// ─────────────────────────────────────────────
+const deleteprofileRoute = async (req, res) => {
+  try {
+    const profile = await Profile.findOneAndDelete({ userId: req.user._id });
 
-        if (!profile) {
-          return res.status(404).json({ message: "Profile not found" });
-        }
-
-        res.status(200).json(profile);
-
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ message: "Server error" });
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
     }
 
-
+    res.status(200).json({ message: "Profile deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
 };
 
+// ─────────────────────────────────────────────
+// ADMIN: Show all profiles (no userId exposed)
+// ─────────────────────────────────────────────
+const showallprofilesRoute = async (req, res) => {
+  try {
+    const profiles = await Profile.find().select("-userId -__v");
+    res.status(200).json(profiles);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
 
+// ─────────────────────────────────────────────
+// ADMIN: Show all users (no password exposed)
+// ─────────────────────────────────────────────
 const showusersbyadminRoute = async (req, res) => {
   try {
-    const users = await Users.find().select("-password");
+    const users = await Users.find().select("-password -__v");
     res.status(200).json(users);
   } catch (err) {
     console.error(err);
@@ -187,11 +123,17 @@ const showusersbyadminRoute = async (req, res) => {
   }
 };
 
-
-
+// ─────────────────────────────────────────────
+// ADMIN: Show one user info (no password)
+// ─────────────────────────────────────────────
 const showuserinfobyadminRoute = async (req, res) => {
   try {
-    const userinfo = await Users.findById(req.params.id).select("-password");
+    const userinfo = await Users.findById(req.params.id).select("-password -__v");
+
+    if (!userinfo) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     res.status(200).json(userinfo);
   } catch (err) {
     console.error(err);
@@ -199,24 +141,54 @@ const showuserinfobyadminRoute = async (req, res) => {
   }
 };
 
+// ─────────────────────────────────────────────
+// ADMIN: Show specific profile by userId (no userId exposed)
+// ─────────────────────────────────────────────
+const showspeceficprofilebyadminRoute = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ userId: req.params.id })
+      .select("-userId -__v");
 
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
 
+    res.status(200).json(profile);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
 
+// ─────────────────────────────────────────────
+// ADMIN: Delete a specific user by ID
+// ─────────────────────────────────────────────
+const deletespeceficuserbyadminRoute = async (req, res) => {
+  try {
+    const user = await Users.findByIdAndDelete(req.params.id); // ✅ fixed: was findOneAndDelete
 
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
 
-
-
-
-
-module.exports = { 
-  addprofileRoute, 
-  showprofileRoute, 
-  showallprofilesRoute, 
-  deleteprofileRoute,
-  deletespeceficuserbyadminRoute,
-  showspeceficprofilebyadminRoute,
+// ─────────────────────────────────────────────
+// EXPORTS
+// ─────────────────────────────────────────────
+module.exports = {
+  addprofileRoute,
+  showprofileRoute,
   updateprofileRoute,
+  deleteprofileRoute,
+  showallprofilesRoute,
   showusersbyadminRoute,
-  showuserinfobyadminRoute
+  showuserinfobyadminRoute,
+  showspeceficprofilebyadminRoute,
+  deletespeceficuserbyadminRoute,
 };

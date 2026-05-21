@@ -109,7 +109,7 @@ export default function Profile() {
 
 
 
-      console.log(res.data);
+      
       setSuccess(true);
       setErrors({});
     } catch (error) {
@@ -145,7 +145,7 @@ export default function Profile() {
     headers: { Authorization: `Bearer ${token}` },
   })
     .then((res) => {
-      console.log(res.data);
+      
     })
     .catch((err) => console.error("Failed to fetch user:", err))
     .finally(() => setFetching(false));
@@ -277,7 +277,7 @@ const handleDelete = async () => {
       <button
         type="submit"
         disabled={loading}
-        className="w-full mt-2 py-3 bg-zinc-900 text-white text-sm font-medium rounded-md
+        className="w-full mt-2 py-3 bg-zinc-900 cursor-pointer text-white text-sm font-medium rounded-md
           hover:bg-zinc-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loading ? "Saving..." : "Save Profile"}
@@ -287,7 +287,7 @@ const handleDelete = async () => {
         type="button"
         disabled={loading}
         onClick={handleDelete}
-        className="w-full mt-2 py-3 bg-red-800 text-white text-sm font-medium rounded-md
+        className="w-full mt-2 py-3 cursor-pointer bg-red-800 text-white text-sm font-medium rounded-md
           hover:bg-zinc-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loading ? "Deleting..." : "Delete Profile"}

@@ -167,19 +167,19 @@ export default function Admin() {
               </td>
               <td className="px-5 py-3">{renderBadge(u.role)}</td>
               <td className="px-5 py-3 text-gray-400">
-                {formatDate(u.createdAt)}
+                {formatDate(u.date)}
               </td>
               <td className="px-5 py-3">
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleView(u._id)}
-                    className="px-3 py-1 text-xs rounded-md bg-stone-100 text-stone-600 hover:bg-stone-200 transition"
+                    className="px-3 py-1 text-xs rounded-md bg-stone-100 text-stone-600 hover:bg-stone-200 transition cursor-pointer"
                   >
                     View
                   </button>
                   <button
                     onClick={() => handleDelete(u._id)}
-                    className="px-3 py-1 text-xs rounded-md bg-red-50 text-red-600 hover:bg-red-100 transition"
+                    className="px-3 py-1 text-xs rounded-md bg-red-50 text-red-600 hover:bg-red-100 transition cursor-pointer"
                   >
                     Delete
                   </button>
@@ -210,17 +210,17 @@ export default function Admin() {
         <div className="flex gap-3 mb-4 justify-center">
   <button
     onClick={() => setRoleFilter("")}
-    className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+    className={`px-4 py-2 rounded-lg text-sm cursor-pointer font-medium transition ${
       roleFilter === ""
         ? "bg-stone-700 text-white"
-        : "bg-white text-stone-600 border border-stone-300 hover:bg-stone-100"
+        : "bg-white text-stone-600 border cursor-pointer border-stone-300 hover:bg-stone-100"
     }`}
   >
     All roles
   </button>
   <button
     onClick={() => setRoleFilter("admin")}
-    className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+    className={`px-4 py-2 rounded-lg text-sm cursor-pointer font-medium transition ${
       roleFilter === "admin"
         ? "bg-purple-600 text-white"
         : "bg-white text-purple-600 border border-purple-200 hover:bg-purple-50"

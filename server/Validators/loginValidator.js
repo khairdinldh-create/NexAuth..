@@ -32,7 +32,7 @@ const loginValidator = async (req, res, next) => {
   // 3. Check if user exists
   // =========================
   try {
-    const existingUser = await users.findOne({ email });
+    const existingUser = await users.findOne({ email }).select("-__v");
 
     if (!existingUser) {
       return res.status(404).json({

@@ -59,7 +59,7 @@ export default function Login() {
     localStorage.setItem("token", res.data.token);
     login(res.data.user);
 
-    console.log(res.data); // check what comes back
+    // check what comes back
     // next step → save user in context
     setErrors({});
 
@@ -154,7 +154,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 text-xs hover:text-zinc-900"
+                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-stone-400 text-xs hover:text-zinc-900"
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
@@ -199,7 +199,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-zinc-900 text-white text-sm font-medium rounded-md
+            className="w-full py-3 bg-zinc-900 cursor-pointer text-white text-sm font-medium rounded-md
               hover:bg-zinc-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Signing In..." : "Sign In"}
